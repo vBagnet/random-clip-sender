@@ -35,6 +35,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_PERSONAL_CHAT_ID: ${{ secrets.TELEGRAM_PERSONAL_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          FORCE_RUN: "1"
 
       - name: Commit updated state (if changed)
         run: |
