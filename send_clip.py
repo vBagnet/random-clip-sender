@@ -29,8 +29,6 @@ from zoneinfo import ZoneInfo
 import requests
 
 STATE_FILE = Path("sent_clips.json")
-TARGET_WEEKDAYS = {1, 3}  # Monday=0 ... Tuesday=1, Thursday=3
-TARGET_HOUR = 17
 
 
 def env(name: str) -> str:
@@ -38,14 +36,7 @@ def env(name: str) -> str:
     if not value:
         raise RuntimeError(f"Missing required environment variable: {name}")
     return value
-
-
-def is_time_to_run() -> bool:
-    if os.environ.get("FORCE_RUN") == "1":
-        return True
-    now = datetime.now(ZoneInfo("Europe/Kyiv"))
-    return now.weekday() in TARGET_WEEKDAYS and now.hour == TARGET_HOUR
-
+  
 
 def get_twitch_app_token(client_id: str, client_secret: str) -> str:
     resp = requests.post(
@@ -148,9 +139,6 @@ def notify_failure(error: Exception) -> None:
 
 
 def main() -> None:
-    if not is_time_to_run():
-        print("Not the scheduled time (Kyiv) — skipping.")
-        return
 
     client_id = env("TWITCH_CLIENT_ID")
     client_secret = env("TWITCH_CLIENT_SECRET")
